@@ -17,3 +17,25 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'static-stagging-ssh'
+    runOptions: 'commands'
+    commands: 'sudo chmod -R 777 /var/www/html/'
+    readyTimeout: '20000'
+
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: 'static-stagging-ssh'
+    sourceFolder: '/home/vsts/work/1/s'
+    contents: '!**/.git/**'
+    targetFolder: '/var/www/html/'
+    readyTimeout: '20000'
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'static-stagging-ssh'
+    runOptions: 'commands'
+    commands: 'sudo chmod -R 755 /var/www/html/'
+    readyTimeout: '20000'
